@@ -1,19 +1,16 @@
 from django.http import  JsonResponse
 import json
+from products.models import Products
 
 def  api_home(request,*args, **kwargs):
-
-    body=request.body # byte string of Json Data
-    print(request.GET)
-    print(request.POST)
-    
+    model_data=Products.objects.all().order_by("?").first()
     data={}
-    try:
-        data=json.loads(body)
-    except :
-        pass
-
-    print(data.keys())
-    return JsonResponse({"message":"hi, there any on take my response"})
+    if model_data:
+        data['id']=model_data.id
+        data['titile']=model_data.title
+        data['contents']=model_data.contents
+        data['price']=model_data.price
+ 
+    return JsonResponse(data)
 
 # Create your views here.
